@@ -1,0 +1,59 @@
+/* Card — 2px solid borders, 4px radius, hover expansion to 4px */
+.cv-card {
+    background: var(--bg-elevated);
+    border: var(--border-weight) solid var(--border-color);
+    border-radius: var(--radius-sm);
+    overflow: hidden;
+    transition: border-width var(--duration-fast) var(--ease-snappy),
+        box-shadow var(--duration-fast) var(--ease-snappy);
+}
+
+.cv-card:hover {
+    border-width: 4px;
+}
+
+/* Witness card — emerald accent */
+.cv-card--witness {
+    border-left: 4px solid var(--truth-emerald);
+}
+
+.cv-card--witness:hover {
+    border-color: var(--truth-emerald);
+    border-width: 4px;
+}
+
+/* Opinion card — lighter, standard */
+.cv-card--opinion {
+    border-color: var(--border-light);
+}
+
+.cv-card--opinion:hover {
+    border-color: var(--border-color);
+}
+
+/* Interactive card */
+.cv-card[role="button"] {
+    cursor: pointer;
+}
+
+.cv-card[role="button"]:active {
+    transform: scale(0.99);
+}
+
+/* Sub-components */
+.cv-card__header {
+    padding: var(--space-md) var(--space-lg);
+    border-bottom: 1px solid var(--border-light);
+}
+
+.cv-card__body {
+    padding: var(--space-lg);
+}
+
+.cv-card__footer {
+    padding: var(--space-md) var(--space-lg);
+    border-top: 1px solid var(--border-light);
+    display: flex;
+    align-items: center;
+    gap: var(--space-md);
+}

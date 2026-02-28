@@ -1,0 +1,42 @@
+# CivicVoice — Cloudflare Pages Security Headers
+# Implements Security Protocol §5.2 (CSP) and camera restrictions.
+#
+# This file is deployed automatically by Cloudflare Pages.
+# https://developers.cloudflare.com/pages/configuration/headers/
+
+/*
+  # ── Content Security Policy ──
+  # Only allow connections to self and Cloudflare services.
+  # Blocks XSS, data injection, and unauthorized external requests.
+  # Turnstile CAPTCHA requires challenges.cloudflare.com (Module 8).
+  Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline' https://challenges.cloudflare.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: blob:; media-src 'self' blob:; connect-src 'self' https://*.cloudflare.com https://*.workers.dev https://challenges.cloudflare.com; frame-src https://challenges.cloudflare.com; frame-ancestors 'none'; base-uri 'self'; form-action 'self'; object-src 'none'; worker-src 'self' blob:; upgrade-insecure-requests;
+
+  # ── Camera Permission ──
+  # Camera access restricted globally; only allowed on /report route.
+  Permissions-Policy: camera=(), microphone=(), geolocation=(self), interest-cohort=()
+
+  # ── Anti-Clickjacking ──
+  X-Frame-Options: DENY
+
+  # ── MIME Sniffing Prevention ──
+  X-Content-Type-Options: nosniff
+
+  # ── Referrer Policy ──
+  # Don't leak whistleblower URLs in referrer headers.
+  Referrer-Policy: strict-origin-when-cross-origin
+
+  # ── XSS Protection (legacy browsers) ──
+  X-XSS-Protection: 1; mode=block
+
+  # ── HSTS ──
+  # Enforce HTTPS for 1 year, include subdomains.
+  Strict-Transport-Security: max-age=31536000; includeSubDomains; preload
+
+  # ── Cross-Origin Isolation (optional hardening) ──
+  Cross-Origin-Opener-Policy: same-origin
+  Cross-Origin-Resource-Policy: same-origin
+
+# ── /report route: Allow camera and microphone ──
+# Camera and mic ONLY permitted on the Witness Cam page.
+/report
+  Permissions-Policy: camera=(self), microphone=(self), geolocation=(self)

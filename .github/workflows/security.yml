@@ -1,0 +1,176 @@
+# CivicVoice — Security Audit Workflow
+# Module 8: Production Deployment
+#
+# Runs on every push to ensure:
+#   1. No secrets leaked (gitleaks)
+#   2. No known vulnerabilities in dependencies (npm audit)
+#   3. CSP headers are properly configured
+#
+# Source: Security Protocol §5, Implementation Plan Module 8
+
+name: Security Audit
+
+on:
+  push:
+    branches: ['*']
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+  security-events: write
+
+env:
+  NODE_VERSION: '20'
+
+jobs:
+  # ── Gitleaks Secret Scanning ──
+  gitleaks:
+    name: Secret Detection (Gitleaks)
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Run Gitleaks
+        uses: gitleaks/gitleaks-action@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  # ── Dependency Vulnerability Audit ──
+  dependency-audit:
+    name: Dependency Audit
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: NPM Audit (production)
+        run: npm audit --production --audit-level=high
+        continue-on-error: true
+
+      - name: Check for known critical vulnerabilities
+        run: |
+          echo "=== Checking for critical vulnerabilities ==="
+          RESULT=$(npm audit --json 2>/dev/null | node -e "
+            const data = JSON.parse(require('fs').readFileSync('/dev/stdin', 'utf8'));
+            const critical = data.metadata?.vulnerabilities?.critical || 0;
+            console.log(critical);
+          " 2>/dev/null || echo "0")
+          if [ "$RESULT" -gt 0 ]; then
+            echo "::error::Found $RESULT critical vulnerabilities!"
+            exit 1
+          fi
+          echo "No critical vulnerabilities found."
+
+  # ── CSP Header Validation ──
+  csp-validation:
+    name: CSP Header Validation
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Validate _headers file exists
+        run: |
+          if [ ! -f "public/_headers" ]; then
+            echo "::error::Missing public/_headers file!"
+            exit 1
+          fi
+
+      - name: Validate CSP directives
+        run: |
+          echo "=== Validating Content Security Policy ==="
+          HEADERS=$(cat public/_headers)
+
+          # Check required CSP directives
+          REQUIRED_DIRECTIVES=("default-src" "script-src" "connect-src" "frame-ancestors" "object-src")
+          for directive in "${REQUIRED_DIRECTIVES[@]}"; do
+            if echo "$HEADERS" | grep -q "$directive"; then
+              echo "✓ Found: $directive"
+            else
+              echo "::error::Missing CSP directive: $directive"
+              exit 1
+            fi
+          done
+
+          # Check security headers
+          REQUIRED_HEADERS=("X-Frame-Options" "X-Content-Type-Options" "Strict-Transport-Security" "Referrer-Policy")
+          for header in "${REQUIRED_HEADERS[@]}"; do
+            if echo "$HEADERS" | grep -q "$header"; then
+              echo "✓ Found: $header"
+            else
+              echo "::error::Missing security header: $header"
+              exit 1
+            fi
+          done
+
+          echo ""
+          echo "=== All CSP directives and security headers validated ==="
+
+      - name: Check for hardcoded secrets in source
+        run: |
+          echo "=== Scanning source for hardcoded secrets ==="
+
+          # Patterns that suggest hardcoded secrets
+          PATTERNS=(
+            "AKIA[0-9A-Z]{16}"
+            "sk_live_[0-9a-zA-Z]{20,}"
+            "AIza[0-9A-Za-z_-]{35}"
+            "-----BEGIN (RSA |EC )?PRIVATE KEY-----"
+          )
+
+          FOUND=0
+          for pattern in "${PATTERNS[@]}"; do
+            RESULTS=$(grep -rn "$pattern" src/ workers/ --include="*.ts" --include="*.tsx" --include="*.js" 2>/dev/null || true)
+            if [ -n "$RESULTS" ]; then
+              echo "::error::Potential secret found matching pattern: $pattern"
+              echo "$RESULTS"
+              FOUND=1
+            fi
+          done
+
+          if [ "$FOUND" -eq 1 ]; then
+            exit 1
+          fi
+
+          echo "✓ No hardcoded secrets found in source."
+
+  # ── No-PII Verification ──
+  pii-check:
+    name: No-PII Verification
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Scan for PII storage patterns
+        run: |
+          echo "=== Scanning for PII storage patterns ==="
+
+          # Check Workers for IP storage
+          PATTERNS=("localStorage.setItem.*ip" "localStorage.setItem.*email" "localStorage.setItem.*phone" "console.log.*cf-connecting-ip")
+          FOUND=0
+          for pattern in "${PATTERNS[@]}"; do
+            RESULTS=$(grep -rni "$pattern" src/ workers/ 2>/dev/null || true)
+            if [ -n "$RESULTS" ]; then
+              echo "::warning::Potential PII storage found: $pattern"
+              echo "$RESULTS"
+              FOUND=1
+            fi
+          done
+
+          if [ "$FOUND" -eq 0 ]; then
+            echo "✓ No PII storage patterns detected."
+          fi

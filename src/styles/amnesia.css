@@ -1,0 +1,341 @@
+/*
+ * amnesia.css — Amnesia Audit Terminal UI
+ *
+ * "Digital Terminal" aesthetic for the Amnesia Protocol audit display.
+ * Component Spec: "Make the user feel like they are inside a high-security vault."
+ *
+ * Uses scanning animations that sequentially "tick off" security checks.
+ */
+
+/* ============================================
+   1. TERMINAL CONTAINER
+   ============================================ */
+.amnesia-audit {
+    background: var(--bg-obsidian);
+    border: var(--border-weight) solid var(--border-color);
+    border-radius: var(--radius-sm);
+    padding: var(--space-lg);
+    font-family: var(--font-data);
+    font-size: 0.8125rem;
+    line-height: 1;
+    position: relative;
+    overflow: hidden;
+}
+
+/* Terminal scanline overlay for atmosphere */
+.amnesia-audit::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: repeating-linear-gradient(0deg,
+            transparent,
+            transparent 2px,
+            rgba(5, 150, 105, 0.03) 2px,
+            rgba(5, 150, 105, 0.03) 4px);
+    pointer-events: none;
+    z-index: 1;
+}
+
+/* Terminal header bar */
+.amnesia-audit__header {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+    margin-bottom: var(--space-lg);
+    padding-bottom: var(--space-sm);
+    border-bottom: 1px solid rgba(5, 150, 105, 0.2);
+    position: relative;
+    z-index: 2;
+}
+
+.amnesia-audit__header-icon {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--truth-emerald);
+    animation: terminalPulse 2s ease-in-out infinite;
+}
+
+.amnesia-audit__header-text {
+    color: var(--truth-emerald);
+    font-size: 0.6875rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+}
+
+
+/* ============================================
+   2. AUDIT LINE ITEMS
+   ============================================ */
+.amnesia-audit__lines {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-md);
+    position: relative;
+    z-index: 2;
+}
+
+.amnesia-audit__line {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+    color: var(--text-muted);
+    opacity: 0;
+    transform: translateX(-8px);
+    transition: none;
+}
+
+/* Sequentially revealed lines */
+.amnesia-audit__line--revealed {
+    opacity: 1;
+    transform: translateX(0);
+    animation: auditLineReveal 0.4s var(--ease-snappy) forwards;
+}
+
+/* Status indicator: [  ] pending / [OK] passed */
+.amnesia-audit__status {
+    min-width: 32px;
+    text-align: center;
+    font-weight: 700;
+}
+
+.amnesia-audit__status--pending {
+    color: var(--text-muted);
+}
+
+.amnesia-audit__status--ok {
+    color: var(--truth-emerald);
+}
+
+/* Label text (e.g., "IP LOG PURGED") */
+.amnesia-audit__label {
+    color: var(--text-inverse);
+    letter-spacing: 0.05em;
+    flex: 1;
+}
+
+/* Dots separator */
+.amnesia-audit__dots {
+    flex: 1;
+    text-align: right;
+    color: rgba(156, 163, 175, 0.3);
+    overflow: hidden;
+    white-space: nowrap;
+}
+
+/* Result text */
+.amnesia-audit__result {
+    min-width: 60px;
+    text-align: right;
+    font-weight: 600;
+    transition: color 0.3s var(--ease-snappy);
+}
+
+.amnesia-audit__result--pending {
+    color: var(--caution-amber);
+}
+
+.amnesia-audit__result--passed {
+    color: var(--truth-emerald);
+}
+
+
+/* ============================================
+   3. SCANNING ANIMATION
+   ============================================ */
+
+/* Active scanning bar that sweeps across the line */
+.amnesia-audit__scanner {
+    position: absolute;
+    left: 0;
+    top: 0;
+    height: 100%;
+    width: 0;
+    background: linear-gradient(90deg,
+            transparent,
+            rgba(5, 150, 105, 0.1),
+            rgba(5, 150, 105, 0.2),
+            rgba(5, 150, 105, 0.1),
+            transparent);
+    pointer-events: none;
+}
+
+.amnesia-audit__scanner--active {
+    animation: scanSweep 0.8s var(--ease-snappy) forwards;
+}
+
+
+/* ============================================
+   4. SUMMARY BAR
+   ============================================ */
+.amnesia-audit__summary {
+    margin-top: var(--space-lg);
+    padding-top: var(--space-sm);
+    border-top: 1px solid rgba(5, 150, 105, 0.2);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: relative;
+    z-index: 2;
+}
+
+.amnesia-audit__summary-text {
+    font-size: 0.6875rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+
+.amnesia-audit__summary-text--pending {
+    color: var(--caution-amber);
+}
+
+.amnesia-audit__summary-text--passed {
+    color: var(--truth-emerald);
+}
+
+.amnesia-audit__timestamp {
+    font-size: 0.625rem;
+    color: var(--text-muted);
+}
+
+
+/* ============================================
+   5. KEYFRAME ANIMATIONS
+   ============================================ */
+
+/* Individual line reveal */
+@keyframes auditLineReveal {
+    from {
+        opacity: 0;
+        transform: translateX(-8px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+/* Scanner sweep across line */
+@keyframes scanSweep {
+    0% {
+        width: 0;
+        left: 0;
+    }
+
+    50% {
+        width: 40%;
+    }
+
+    100% {
+        width: 0;
+        left: 100%;
+    }
+}
+
+/* Terminal header pulse */
+@keyframes terminalPulse {
+
+    0%,
+    100% {
+        opacity: 1;
+        box-shadow: 0 0 4px var(--truth-emerald);
+    }
+
+    50% {
+        opacity: 0.5;
+        box-shadow: 0 0 8px var(--truth-emerald);
+    }
+}
+
+/* Rescan button hover glow */
+@keyframes rescanGlow {
+
+    0%,
+    100% {
+        box-shadow: 0 0 0 rgba(5, 150, 105, 0);
+    }
+
+    50% {
+        box-shadow: 0 0 12px rgba(5, 150, 105, 0.3);
+    }
+}
+
+/* Rescan button */
+.amnesia-audit__rescan {
+    background: transparent;
+    border: 1px solid var(--truth-emerald);
+    color: var(--truth-emerald);
+    padding: var(--space-xs) var(--space-md);
+    font-family: var(--font-data);
+    font-size: 0.625rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    cursor: pointer;
+    border-radius: var(--radius-sm);
+    transition: all var(--duration-fast) var(--ease-snappy);
+    position: relative;
+    z-index: 2;
+    margin-top: var(--space-md);
+}
+
+.amnesia-audit__rescan:hover {
+    background: rgba(5, 150, 105, 0.1);
+    animation: rescanGlow 1s ease-in-out infinite;
+}
+
+.amnesia-audit__rescan:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+    animation: none;
+}
+
+.amnesia-audit__rescan:focus-visible {
+    outline: 2px solid var(--truth-emerald);
+    outline-offset: 2px;
+}
+
+
+/* ============================================
+   6. GPU COMPOSITING HINTS
+   ============================================ */
+.amnesia-audit__line {
+    will-change: opacity, transform;
+}
+
+.amnesia-audit__scanner {
+    will-change: width, left;
+}
+
+
+/* ============================================
+   7. REDUCED MOTION — Accessibility
+   ============================================ */
+@media (prefers-reduced-motion: reduce) {
+    .amnesia-audit::before {
+        display: none;
+    }
+
+    .amnesia-audit__header-icon {
+        animation: none;
+        opacity: 1;
+    }
+
+    .amnesia-audit__line {
+        opacity: 1;
+        transform: none;
+        will-change: auto;
+    }
+
+    .amnesia-audit__line--revealed {
+        animation: none;
+    }
+
+    .amnesia-audit__scanner {
+        display: none;
+    }
+
+    .amnesia-audit__rescan:hover {
+        animation: none;
+    }
+}

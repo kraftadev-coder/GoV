@@ -1,0 +1,21 @@
+# CivicVoice — Gitleaks Configuration
+# Module 8: Production Deployment
+#
+# Prevents accidental secret leaks in commits.
+# Source: Security Protocol §5
+
+title = "CivicVoice Gitleaks Config"
+
+[allowlist]
+  description = "Allow known safe patterns"
+
+  # Test files may reference secret patterns as examples
+  paths = [
+    '''tests/.*''',
+    '''\.github/workflows/.*''',
+  ]
+
+  # Allow Cloudflare example domains
+  regexes = [
+    '''0x4AAAAAAExample.*''',
+  ]

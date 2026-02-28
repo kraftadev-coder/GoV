@@ -1,0 +1,111 @@
+/* EvidenceFrame — "Technical Frame" for media evidence */
+.evidence-frame {
+    border: var(--border-weight) solid var(--border-color);
+    border-radius: var(--radius-sm);
+    overflow: hidden;
+    background: var(--bg-obsidian);
+}
+
+/* Top bar — Region label */
+.evidence-frame__top-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: var(--space-sm) var(--space-md);
+    background: var(--bg-obsidian);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.evidence-frame__region {
+    display: flex;
+    align-items: center;
+    gap: var(--space-xs);
+    font-family: var(--font-data);
+    font-size: 0.6875rem;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--truth-emerald);
+}
+
+.evidence-frame__region-icon {
+    font-size: 0.75rem;
+}
+
+.evidence-frame__live-tag {
+    font-family: var(--font-data);
+    font-size: 0.5625rem;
+    font-weight: 700;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    padding: 1px 6px;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 2px;
+}
+
+/* Media container */
+.evidence-frame__media {
+    min-height: 80px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.evidence-frame__image {
+    width: 100%;
+    height: auto;
+    display: block;
+    object-fit: cover;
+    max-height: 300px;
+}
+
+/* Placeholder when no media */
+.evidence-frame__placeholder {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-xs);
+    padding: var(--space-lg) var(--space-md);
+    color: var(--text-muted);
+}
+
+.evidence-frame__placeholder-icon {
+    font-size: 1.5rem;
+    opacity: 0.5;
+}
+
+.evidence-frame__placeholder-text {
+    font-family: var(--font-data);
+    font-size: 0.6875rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+}
+
+/* Bottom bar — SHA-256 hash */
+.evidence-frame__bottom-bar {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+    padding: var(--space-xs) var(--space-md);
+    background: var(--bg-obsidian);
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.evidence-frame__hash-label {
+    font-family: var(--font-data);
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--caution-amber);
+    flex-shrink: 0;
+}
+
+.evidence-frame__hash-value {
+    font-family: var(--font-data);
+    font-size: 10px;
+    color: rgba(255, 255, 255, 0.4);
+    word-break: break-all;
+    line-height: 1.4;
+}

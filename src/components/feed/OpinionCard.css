@@ -1,0 +1,80 @@
+/* OpinionCard — Lightweight social opinion card */
+.opinion-card {
+    background: var(--bg-elevated);
+    border: var(--border-weight) solid var(--border-light);
+    border-radius: var(--radius-sm);
+    overflow: hidden;
+    transition: border-color var(--duration-fast) var(--ease-snappy),
+        border-width var(--duration-fast) var(--ease-snappy);
+}
+
+.opinion-card:hover {
+    border-color: var(--border-color);
+    border-width: 3px;
+}
+
+/* Header */
+.opinion-card__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: var(--space-md) var(--space-lg);
+    border-bottom: 1px solid var(--border-light);
+}
+
+.opinion-card__handle {
+    font-family: var(--font-data);
+    font-size: 0.8125rem;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+    color: var(--text-main);
+}
+
+.opinion-card__timestamp {
+    font-family: var(--font-data);
+    font-size: 0.6875rem;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+}
+
+/* Body */
+.opinion-card__body {
+    padding: var(--space-lg);
+}
+
+.opinion-card__text {
+    color: var(--text-secondary);
+    font-size: 0.9375rem;
+    line-height: 1.65;
+}
+
+/* Footer */
+.opinion-card__footer {
+    padding: var(--space-sm) var(--space-lg) var(--space-md);
+}
+
+/* Discuss button (was span — now semantic button for a11y) */
+.opinion-card__action {
+    font-family: var(--font-data);
+    font-size: 0.6875rem;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    cursor: pointer;
+    background: none;
+    border: none;
+    padding: 0;
+    transition: color var(--duration-fast) var(--ease-snappy);
+}
+
+.opinion-card__action:hover {
+    color: var(--text-main);
+}
+
+.opinion-card__action:focus-visible {
+    outline: 2px solid var(--truth-emerald);
+    outline-offset: 2px;
+    border-radius: 2px;
+}

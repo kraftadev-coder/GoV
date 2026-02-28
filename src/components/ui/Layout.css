@@ -1,0 +1,77 @@
+/* Layout — AppShell, Header, Main, BentoGrid */
+
+/* AppShell */
+.cv-shell {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Header — Deep Obsidian bar */
+.cv-header {
+    background: var(--bg-obsidian);
+    color: var(--text-inverse);
+    padding: var(--space-md) 0;
+    border-bottom: var(--border-weight) solid var(--truth-emerald);
+    position: sticky;
+    top: 0;
+    z-index: var(--z-dropdown);
+}
+
+.cv-header .container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+/* Main */
+.cv-main {
+    flex: 1;
+    padding: var(--space-xl) 0;
+}
+
+/* BentoGrid — Asymmetric Bento Ledger */
+.cv-bento {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--space-lg);
+}
+
+/* Witness posts = 2 columns wide */
+.cv-bento__item--span-2 {
+    grid-column: span 2;
+}
+
+/* Opinion posts = 1 column */
+.cv-bento__item--span-1 {
+    grid-column: span 1;
+}
+
+/* Mobile: stack everything */
+@media (max-width: 640px) {
+    .cv-bento {
+        grid-template-columns: 1fr;
+    }
+
+    .cv-bento__item--span-2 {
+        grid-column: span 1;
+    }
+}
+
+/* Tablet: 2 columns */
+@media (min-width: 641px) and (max-width: 1023px) {
+    .cv-bento {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+/* Desktop: 3 columns for more density */
+@media (min-width: 1024px) {
+    .cv-bento {
+        grid-template-columns: repeat(3, 1fr);
+    }
+
+    .cv-bento__item--span-2 {
+        grid-column: span 2;
+    }
+}

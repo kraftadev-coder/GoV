@@ -1,0 +1,217 @@
+/*
+ * CryptoHandle — Editorial Brutalist styling
+ *
+ * Component: Anonymous crypto handle + reputation badge
+ * Design System: Heavy borders, JetBrains Mono data labels, Emerald accents
+ */
+
+/* ─── Container ─── */
+.crypto-handle {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-md);
+    text-align: center;
+    padding: var(--space-lg) 0;
+}
+
+/* ─── Avatar ─── */
+.crypto-handle__avatar {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    background: var(--bg-obsidian);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: var(--border-weight) solid var(--border-color);
+    transition: border-width var(--duration-fast) var(--ease-snappy),
+        box-shadow var(--duration-fast) var(--ease-snappy);
+}
+
+.crypto-handle__avatar:hover {
+    border-width: 4px;
+    box-shadow: 0 0 0 4px var(--truth-emerald-light);
+}
+
+.crypto-handle__avatar-icon {
+    font-size: 2rem;
+    color: var(--truth-emerald);
+    line-height: 1;
+}
+
+/* ─── Info ─── */
+.crypto-handle__info {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-sm);
+}
+
+.crypto-handle__row {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+}
+
+.crypto-handle__name {
+    font-family: var(--font-data);
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--text-main);
+    letter-spacing: 0.02em;
+}
+
+.crypto-handle__badges {
+    display: flex;
+    gap: var(--space-xs);
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.crypto-handle__sub {
+    font-size: 0.75rem;
+    margin-top: var(--space-xs);
+}
+
+/* ─── Edit mode ─── */
+.crypto-handle__edit {
+    display: flex;
+    align-items: center;
+    gap: var(--space-xs);
+}
+
+.crypto-handle__input {
+    font-family: var(--font-data);
+    font-size: 0.875rem;
+    padding: var(--space-xs) var(--space-sm);
+    border: var(--border-weight) solid var(--border-color);
+    border-radius: var(--radius-sm);
+    background: var(--bg-raw);
+    color: var(--text-main);
+    outline: none;
+    width: 160px;
+    transition: border-color var(--duration-fast) var(--ease-snappy);
+}
+
+.crypto-handle__input:focus {
+    border-color: var(--truth-emerald);
+}
+
+.crypto-handle__edit-btn,
+.crypto-handle__save-btn,
+.crypto-handle__cancel-btn {
+    background: none;
+    border: var(--border-weight) solid var(--border-color);
+    border-radius: var(--radius-sm);
+    padding: var(--space-xs) var(--space-sm);
+    font-size: 0.875rem;
+    cursor: pointer;
+    transition: all var(--duration-fast) var(--ease-snappy);
+    color: var(--text-main);
+}
+
+.crypto-handle__save-btn {
+    color: var(--truth-emerald);
+    border-color: var(--truth-emerald);
+}
+
+.crypto-handle__save-btn:hover {
+    background: var(--truth-emerald);
+    color: white;
+}
+
+.crypto-handle__cancel-btn:hover {
+    background: var(--danger-red);
+    color: white;
+    border-color: var(--danger-red);
+}
+
+.crypto-handle__edit-btn:hover {
+    border-color: var(--truth-emerald);
+    color: var(--truth-emerald);
+}
+
+/* ─── Details section ─── */
+.crypto-handle__details {
+    width: 100%;
+    margin-top: var(--space-md);
+    padding-top: var(--space-md);
+    border-top: 1px solid var(--border-light);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-md);
+}
+
+.crypto-handle__score {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-xs);
+}
+
+.crypto-handle__score-value {
+    font-family: var(--font-serif);
+    font-size: 2.5rem;
+    font-weight: 900;
+    color: var(--text-main);
+    line-height: 1;
+}
+
+.crypto-handle__score-label {
+    font-size: 0.6875rem;
+}
+
+/* ─── Progress bar ─── */
+.crypto-handle__progress {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-xs);
+    width: 100%;
+}
+
+.crypto-handle__progress-bar {
+    width: 100%;
+    height: 8px;
+    background: var(--border-light);
+    border-radius: var(--radius-sm);
+    overflow: hidden;
+}
+
+.crypto-handle__progress-fill {
+    height: 100%;
+    background: var(--truth-emerald);
+    border-radius: var(--radius-sm);
+    transition: width var(--duration-normal) var(--ease-snappy);
+}
+
+.crypto-handle__progress-text {
+    text-align: center;
+    font-size: 0.6875rem;
+}
+
+/* ─── Stats row ─── */
+.crypto-handle__stats {
+    display: flex;
+    justify-content: center;
+    gap: var(--space-xl);
+}
+
+.crypto-handle__stat {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+}
+
+.crypto-handle__stat-value {
+    font-family: var(--font-serif);
+    font-size: 1.5rem;
+    font-weight: 800;
+    color: var(--text-main);
+    line-height: 1;
+}
+
+.crypto-handle__stat-label {
+    font-size: 0.625rem;
+}

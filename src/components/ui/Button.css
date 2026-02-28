@@ -1,0 +1,96 @@
+/* Button — Heavy-bordered brutalist buttons */
+.cv-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-sm);
+    border: var(--border-weight) solid var(--border-color);
+    border-radius: var(--radius-sm);
+    background: transparent;
+    color: var(--text-main);
+    font-family: var(--font-data);
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all var(--duration-fast) var(--ease-snappy);
+    white-space: nowrap;
+}
+
+/* Sizes */
+.cv-btn--sm {
+    padding: 6px 12px;
+    font-size: 0.6875rem;
+}
+
+.cv-btn--md {
+    padding: 10px 20px;
+    font-size: 0.8125rem;
+}
+
+.cv-btn--lg {
+    padding: 14px 28px;
+    font-size: 0.875rem;
+}
+
+/* Variants */
+.cv-btn--primary {
+    background: var(--truth-emerald);
+    border-color: var(--truth-emerald);
+    color: #FFFFFF;
+}
+
+.cv-btn--primary:hover {
+    background: #047857;
+    border-color: #047857;
+    transform: translateY(-1px);
+}
+
+.cv-btn--secondary {
+    background: var(--bg-raw);
+    border-color: var(--border-color);
+    color: var(--text-main);
+}
+
+.cv-btn--secondary:hover {
+    background: var(--text-main);
+    color: var(--bg-raw);
+}
+
+.cv-btn--ghost {
+    border-color: transparent;
+    color: var(--text-secondary);
+}
+
+.cv-btn--ghost:hover {
+    background: rgba(0, 0, 0, 0.04);
+    color: var(--text-main);
+}
+
+.cv-btn--danger {
+    background: var(--danger-red);
+    border-color: var(--danger-red);
+    color: #FFFFFF;
+}
+
+.cv-btn--danger:hover {
+    background: #B91C1C;
+    border-color: #B91C1C;
+}
+
+/* Full width */
+.cv-btn--full {
+    width: 100%;
+}
+
+/* Disabled */
+.cv-btn:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+    transform: none;
+}
+
+/* Active press */
+.cv-btn:active:not(:disabled) {
+    transform: translateY(0) scale(0.98);
+}

@@ -1,0 +1,60 @@
+/* Navbar styles */
+.cv-nav__logo {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+    text-decoration: none;
+    color: var(--text-inverse);
+}
+
+.cv-nav__logo-mark {
+    font-size: 1.5rem;
+    color: var(--truth-emerald);
+    line-height: 1;
+}
+
+.cv-nav__logo-text {
+    font-family: var(--font-serif);
+    font-weight: 900;
+    font-size: 1.25rem;
+    letter-spacing: -0.02em;
+}
+
+.cv-nav__links {
+    display: flex;
+    align-items: center;
+    gap: var(--space-lg);
+}
+
+.cv-nav__link {
+    font-family: var(--font-data);
+    font-size: 0.75rem;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    text-decoration: none;
+    padding: var(--space-xs) 0;
+    border-bottom: 2px solid transparent;
+    transition: all var(--duration-fast) var(--ease-snappy);
+}
+
+.cv-nav__link:hover {
+    color: var(--text-inverse);
+}
+
+.cv-nav__link--active {
+    color: var(--truth-emerald);
+    border-bottom-color: var(--truth-emerald);
+}
+
+/* Mobile */
+@media (max-width: 640px) {
+    .cv-nav__links {
+        gap: var(--space-md);
+    }
+
+    .cv-nav__link {
+        font-size: 0.6875rem;
+    }
+}

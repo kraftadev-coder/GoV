@@ -1,0 +1,329 @@
+/*
+ * Module 6: Peer Review Queue — Editorial Brutalist Styles
+ *
+ * Amber caution theme for flagged submissions.
+ * Follows the Editorial Brutalist design language with:
+ * - 2px heavy borders
+ * - JetBrains Mono for technical metadata
+ * - Caution Amber (#D97706) accent for flagged items
+ * - 4px radius (Modern Refined Brutalism)
+ *
+ * Source: UI/UX Strategy §2 + Component Spec
+ */
+
+/* ─── Queue Container ─── */
+
+.peer-review-queue {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-md);
+    padding: var(--space-lg);
+}
+
+/* ─── Header ─── */
+
+.peer-review-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-bottom: var(--space-md);
+    border-bottom: var(--border-weight) solid var(--caution-amber);
+}
+
+.peer-review-title {
+    font-family: var(--font-serif);
+    font-size: 1.25rem;
+    font-weight: 800;
+    color: var(--text-main);
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+}
+
+.peer-review-icon {
+    color: var(--caution-amber);
+    font-size: 1.25rem;
+}
+
+.peer-review-count {
+    background: var(--caution-amber-light);
+    color: var(--caution-amber);
+    padding: var(--space-xs) var(--space-sm);
+    border: 1px solid var(--caution-amber);
+    border-radius: var(--radius-sm);
+    font-weight: 700;
+}
+
+/* ─── Access Gate ─── */
+
+.peer-review-gate {
+    background: var(--caution-amber-light);
+    border: var(--border-weight) solid var(--caution-amber);
+    border-radius: var(--radius-sm);
+    padding: var(--space-md);
+}
+
+.peer-review-gate-text {
+    font-family: var(--font-body);
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+    margin: 0;
+}
+
+.peer-review-gate-text strong {
+    color: var(--caution-amber);
+    font-family: var(--font-data);
+    text-transform: uppercase;
+    font-size: 0.75rem;
+    letter-spacing: 0.05em;
+}
+
+/* ─── Empty State ─── */
+
+.peer-review-empty {
+    text-align: center;
+    padding: var(--space-2xl) var(--space-lg);
+    color: var(--text-muted);
+}
+
+.peer-review-empty p {
+    margin-top: var(--space-sm);
+    font-size: 0.875rem;
+}
+
+/* ─── Loading State ─── */
+
+.peer-review-loading {
+    text-align: center;
+    padding: var(--space-2xl) var(--space-lg);
+    color: var(--caution-amber);
+    animation: pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes pulse {
+
+    0%,
+    100% {
+        opacity: 0.6;
+    }
+
+    50% {
+        opacity: 1;
+    }
+}
+
+/* ─── Submission List ─── */
+
+.peer-review-list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-md);
+}
+
+/* ─── Flagged Card ─── */
+
+.flagged-card {
+    border: var(--border-weight) solid var(--caution-amber);
+    border-radius: var(--radius-sm);
+    background: var(--bg-elevated);
+    padding: var(--space-md);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-sm);
+    transition: border-color var(--duration-fast) var(--ease-snappy),
+        box-shadow var(--duration-fast) var(--ease-snappy);
+}
+
+.flagged-card:hover {
+    border-width: 3px;
+    box-shadow: 0 2px 8px rgba(217, 119, 6, 0.15);
+}
+
+/* ─── Flag Banner ─── */
+
+.flagged-banner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.flagged-badge {
+    background: var(--caution-amber);
+    color: white;
+    padding: 2px var(--space-sm);
+    border-radius: 2px;
+    font-weight: 700;
+    font-size: 0.6875rem;
+}
+
+.flagged-time {
+    color: var(--text-muted);
+    font-size: 0.6875rem;
+}
+
+/* ─── Reason ─── */
+
+.flagged-reason {
+    font-family: var(--font-body);
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+    line-height: 1.5;
+    border-left: 3px solid var(--caution-amber);
+    padding-left: var(--space-sm);
+    margin: 0;
+}
+
+/* ─── Metadata Grid ─── */
+
+.flagged-meta {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    gap: var(--space-sm);
+    padding: var(--space-sm) 0;
+    border-top: 1px solid var(--border-light);
+    border-bottom: 1px solid var(--border-light);
+}
+
+.flagged-meta-item {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.flagged-meta-value {
+    font-family: var(--font-data);
+    font-size: 0.75rem;
+    color: var(--text-main);
+}
+
+.flagged-meta-value.mono,
+.flagged-meta-value.data-hash {
+    font-family: var(--font-data);
+    font-size: 0.6875rem;
+    letter-spacing: 0.02em;
+    word-break: break-all;
+}
+
+/* ─── Vote Tally ─── */
+
+.flagged-tally {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-xs);
+}
+
+.tally-bar {
+    display: flex;
+    height: 6px;
+    border-radius: 3px;
+    overflow: hidden;
+    background: var(--border-light);
+}
+
+.tally-verify {
+    background: var(--truth-emerald);
+    transition: width var(--duration-normal) var(--ease-snappy);
+}
+
+.tally-reject {
+    background: var(--danger-red);
+    transition: width var(--duration-normal) var(--ease-snappy);
+}
+
+.tally-counts {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.tally-count-verify {
+    color: var(--truth-emerald);
+    font-weight: 700;
+}
+
+.tally-count-total {
+    color: var(--text-muted);
+}
+
+.tally-count-reject {
+    color: var(--danger-red);
+    font-weight: 700;
+}
+
+/* ─── Vote Actions ─── */
+
+.flagged-actions {
+    display: flex;
+    gap: var(--space-sm);
+    padding-top: var(--space-sm);
+}
+
+.vote-btn {
+    flex: 1;
+    padding: var(--space-sm) var(--space-md);
+    border: var(--border-weight) solid;
+    border-radius: var(--radius-sm);
+    font-family: var(--font-data);
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all var(--duration-fast) var(--ease-snappy);
+    background: transparent;
+}
+
+.vote-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.vote-verify {
+    color: var(--truth-emerald);
+    border-color: var(--truth-emerald);
+}
+
+.vote-verify:hover:not(:disabled) {
+    background: var(--truth-emerald);
+    color: white;
+}
+
+.vote-reject {
+    color: var(--danger-red);
+    border-color: var(--danger-red);
+}
+
+.vote-reject:hover:not(:disabled) {
+    background: var(--danger-red);
+    color: white;
+}
+
+/* ─── Voted State ─── */
+
+.flagged-voted {
+    text-align: center;
+    padding: var(--space-sm);
+    color: var(--truth-emerald);
+    border-top: 1px solid var(--border-light);
+    font-weight: 700;
+}
+
+/* ─── Responsive ─── */
+
+@media (max-width: 640px) {
+    .peer-review-queue {
+        padding: var(--space-md);
+    }
+
+    .flagged-meta {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .flagged-actions {
+        flex-direction: column;
+    }
+
+    .vote-btn {
+        width: 100%;
+    }
+}

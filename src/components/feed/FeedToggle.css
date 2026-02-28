@@ -1,0 +1,63 @@
+/* FeedToggle — Tab switch between Social and Witness lanes */
+.feed-toggle {
+    display: flex;
+    position: relative;
+    border: var(--border-weight) solid var(--border-color);
+    border-radius: var(--radius-sm);
+    overflow: hidden;
+    background: var(--bg-elevated);
+}
+
+.feed-toggle__tab {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-sm);
+    padding: var(--space-md) var(--space-lg);
+    background: transparent;
+    border: none;
+    color: var(--text-muted);
+    font-family: var(--font-data);
+    font-size: 0.8125rem;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: color var(--duration-fast) var(--ease-snappy),
+        background-color var(--duration-fast) var(--ease-snappy);
+    position: relative;
+    z-index: 1;
+}
+
+.feed-toggle__tab:hover {
+    color: var(--text-main);
+    background: rgba(0, 0, 0, 0.03);
+}
+
+.feed-toggle__tab--active {
+    color: var(--text-main);
+    font-weight: 700;
+}
+
+.feed-toggle__tab--active.feed-toggle__tab--witness {
+    color: var(--truth-emerald);
+}
+
+.feed-toggle__icon {
+    font-size: 1rem;
+    line-height: 1;
+}
+
+/* Sliding indicator strip */
+.feed-toggle__indicator {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 50%;
+    height: 3px;
+    background: var(--truth-emerald);
+    transition: transform var(--duration-normal) var(--ease-snappy),
+        background-color var(--duration-normal) var(--ease-snappy);
+    border-radius: 2px 2px 0 0;
+}

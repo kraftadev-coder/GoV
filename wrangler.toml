@@ -1,0 +1,68 @@
+# CivicVoice — Cloudflare Workers Configuration
+# Source: Implementation Plan Module 5
+
+name = "civicvoice-api"
+main = "workers/index.ts"
+compatibility_date = "2024-12-01"
+compatibility_flags = ["nodejs_compat"]
+
+# ─── D1 Database Binding ───
+[[d1_databases]]
+binding = "DB"
+database_name = "civicvoice-db"
+database_id = "5124c643-8361-4350-a68f-e7a932a235f0"
+
+# ─── R2 Bucket Binding (enable after adding credit card) ───
+# Uncomment when R2 is enabled in Cloudflare Dashboard:
+# [[r2_buckets]]
+# binding = "MEDIA_BUCKET"
+# bucket_name = "civicvoice-media"
+
+# ─── Observability — Disabled for Amnesia Protocol §1.1 ───
+[observability]
+enabled = false
+
+# ─── Worker Routes ───
+# When deploying to custom domain, add:
+# [[routes]]
+# pattern = "civicvoice.ng/api/*"
+# zone_name = "civicvoice.ng"
+
+# ─── Worker Secrets (Module 7 + Module 8) ───
+# Set via: wrangler secret put <SECRET_NAME>
+#
+# Required secrets:
+#   ADMIN_SECRET      — Bearer token for /api/admin/* endpoints
+#   TURNSTILE_SECRET  — Cloudflare Turnstile secret key for bot prevention
+#
+# Optional secrets:
+#   PAYSTACK_SECRET   — PayStack API key (future: donations)
+#   GOOGLE_MAPS_KEY   — Google Maps API key (future: geo visualization)
+#
+# NEVER commit actual secret values to this file!
+
+# ─── Environment Variables (non-secret) ───
+[vars]
+TURNSTILE_SITE_KEY = "0x4AAAAAAA_placeholder_replace_in_dashboard"
+
+# ─── Environment: Production ───
+[env.production]
+name = "civicvoice-api"
+
+[[env.production.d1_databases]]
+binding = "DB"
+database_name = "civicvoice-db"
+database_id = "5124c643-8361-4350-a68f-e7a932a235f0"
+
+# Uncomment when R2 is enabled:
+# [[env.production.r2_buckets]]
+# binding = "MEDIA_BUCKET"
+# bucket_name = "civicvoice-media"
+
+[env.production.vars]
+TURNSTILE_SITE_KEY = "0x4AAAAAAA_replace_with_production_site_key"
+
+# ─── Dev Settings ───
+[dev]
+port = 8787
+local_protocol = "http"
