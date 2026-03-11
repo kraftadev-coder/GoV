@@ -1,0 +1,188 @@
+/* ─── Opinion Composer — Text-only Social Post Form ─── */
+
+.opinion-composer {
+    background: var(--card-bg, rgba(255, 255, 255, 0.6));
+    border: var(--border-weight, 1px) solid var(--border-color, rgba(0, 0, 0, 0.08));
+    border-radius: var(--radius-md, 12px);
+    overflow: hidden;
+    margin-bottom: var(--space-lg, 1.5rem);
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.opinion-composer:focus-within {
+    border-color: var(--lavender, #b4a7d6);
+    box-shadow: 0 0 0 3px rgba(180, 167, 214, 0.15);
+}
+
+/* Header */
+.opinion-composer__header {
+    display: flex;
+    align-items: center;
+    gap: var(--space-xs, 0.5rem);
+    padding: var(--space-sm, 0.75rem) var(--space-md, 1rem);
+    border-bottom: 1px solid var(--border-color, rgba(0, 0, 0, 0.06));
+    font-size: 0.8125rem;
+    font-weight: 600;
+    color: var(--text-muted, #6b7280);
+    letter-spacing: 0.02em;
+}
+
+.opinion-composer__icon {
+    font-size: 1rem;
+}
+
+.opinion-composer__label {
+    text-transform: uppercase;
+    font-size: 0.6875rem;
+    letter-spacing: 0.08em;
+}
+
+/* Body */
+.opinion-composer__body {
+    padding: var(--space-md, 1rem);
+}
+
+/* Textarea */
+.opinion-composer__textarea {
+    width: 100%;
+    min-height: 80px;
+    padding: var(--space-sm, 0.75rem);
+    border: 1px solid var(--border-color, rgba(0, 0, 0, 0.1));
+    border-radius: var(--radius-sm, 8px);
+    background: var(--bg-main, #faf8f5);
+    color: var(--text-main, #1a1a1a);
+    font-family: var(--font-body, 'Inter', system-ui, sans-serif);
+    font-size: 0.9375rem;
+    line-height: 1.6;
+    resize: vertical;
+    outline: none;
+    transition: border-color 0.2s ease, background 0.2s ease;
+}
+
+.opinion-composer__textarea::placeholder {
+    color: var(--text-muted, #9ca3af);
+    font-style: italic;
+}
+
+.opinion-composer__textarea:focus {
+    border-color: var(--lavender, #b4a7d6);
+    background: #fff;
+}
+
+.opinion-composer__textarea:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+/* Footer — char count + submit */
+.opinion-composer__footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: var(--space-sm, 0.75rem);
+    gap: var(--space-sm, 0.5rem);
+}
+
+.opinion-composer__count {
+    font-size: 0.75rem;
+    color: var(--text-muted, #9ca3af);
+    font-family: var(--font-data, 'JetBrains Mono', monospace);
+    font-variant-numeric: tabular-nums;
+}
+
+.opinion-composer__count--warn {
+    color: var(--amber, #d97706);
+    font-weight: 600;
+}
+
+.opinion-composer__actions {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm, 0.75rem);
+}
+
+.opinion-composer__success {
+    font-size: 0.8125rem;
+    color: var(--truth-emerald, #10b981);
+    font-weight: 600;
+    animation: composerFadeIn 0.3s ease;
+}
+
+.opinion-composer__error {
+    font-size: 0.75rem;
+    color: var(--danger-red, #dc2626);
+    max-width: 200px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+/* Submit button */
+.opinion-composer__submit {
+    padding: var(--space-xs, 0.375rem) var(--space-lg, 1.25rem);
+    background: var(--text-main, #1a1a1a);
+    color: #fff;
+    border: none;
+    border-radius: var(--radius-sm, 8px);
+    font-size: 0.8125rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    letter-spacing: 0.02em;
+}
+
+.opinion-composer__submit:hover:not(:disabled) {
+    background: var(--lavender, #b4a7d6);
+    color: #fff;
+    transform: translateY(-1px);
+}
+
+.opinion-composer__submit:active:not(:disabled) {
+    transform: translateY(0);
+}
+
+.opinion-composer__submit:disabled {
+    opacity: 0.35;
+    cursor: not-allowed;
+    transform: none;
+}
+
+.opinion-composer__spinner {
+    display: inline-block;
+    animation: composerSpin 1s linear infinite;
+}
+
+/* Hint text */
+.opinion-composer__hint {
+    margin-top: var(--space-xs, 0.375rem);
+    font-size: 0.6875rem;
+    color: var(--text-muted, #9ca3af);
+    line-height: 1.4;
+}
+
+.opinion-composer__hint strong {
+    color: var(--lavender, #b4a7d6);
+}
+
+/* Animations */
+@keyframes composerFadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-4px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes composerSpin {
+    from {
+        transform: rotate(0deg);
+    }
+
+    to {
+        transform: rotate(360deg);
+    }
+}

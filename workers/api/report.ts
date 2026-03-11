@@ -32,7 +32,7 @@ export interface ReportPayload {
     contentHash: string;
     geoLabel: string;
     deviceCountry: string | null;
-    mediaType: 'image' | 'audio' | 'video';
+    mediaType: 'image' | 'audio' | 'video' | 'text';
     anonToken: string;
 }
 
@@ -102,8 +102,8 @@ export function validatePayload(payload: unknown): string | null {
         return 'Invalid lane: must be "witness" or "social"';
     }
 
-    if (typeof p.mediaType !== 'string' || !['image', 'audio', 'video'].includes(p.mediaType)) {
-        return 'Invalid mediaType: must be "image", "audio", or "video"';
+    if (typeof p.mediaType !== 'string' || !['image', 'audio', 'video', 'text'].includes(p.mediaType)) {
+        return 'Invalid mediaType: must be "image", "audio", "video", or "text"';
     }
 
     if (typeof p.geoLabel !== 'string') {
@@ -292,7 +292,7 @@ export async function handleReportSubmission(
                 contentHash: String(formData.get('contentHash') ?? ''),
                 geoLabel: String(formData.get('geoLabel') ?? 'Unknown'),
                 deviceCountry: formData.get('deviceCountry') as string | null,
-                mediaType: (formData.get('mediaType') as 'image' | 'audio' | 'video') ?? 'image',
+                mediaType: (formData.get('mediaType') as 'image' | 'audio' | 'video' | 'text') ?? 'text',
                 anonToken: String(formData.get('anonToken') ?? ''),
             };
 

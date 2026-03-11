@@ -26,5 +26,12 @@ export default defineConfig({
   server: {
     host: true,
     port: 5173,
+    // Proxy /api/* to Wrangler dev server for local Worker integration
+    proxy: {
+      '/api': {
+        target: 'http://localhost:8787',
+        changeOrigin: true,
+      },
+    },
   },
 })

@@ -38,6 +38,9 @@ export interface SubmissionData {
     geoStamp: GeoStamp | null;
     contentHash: string;
     sorSokeEnabled: boolean;
+    title: string;
+    description: string;
+    lane: 'witness' | 'social';
 }
 
 interface SubmissionFlowProps {
@@ -56,6 +59,9 @@ const SubmissionFlow: React.FC<SubmissionFlowProps> = ({ onSubmit }) => {
     const [geoStamp, setGeoStamp] = useState<GeoStamp | null>(null);
     const [scrubResult, setScrubResult] = useState<ScrubResult | null>(null);
     const [sorSokeEnabled, setSorSokeEnabled] = useState(false);
+    const [title, setTitle] = useState('');
+    const [description, setDescription] = useState('');
+    const [lane, setLane] = useState<'witness' | 'social'>('witness');
     const [showAmnesiaWipe, setShowAmnesiaWipe] = useState(false);
     const [error, setError] = useState<string | null>(null);
     const [turnstileToken, setTurnstileToken] = useState<string | null>(null);
@@ -187,6 +193,9 @@ const SubmissionFlow: React.FC<SubmissionFlowProps> = ({ onSubmit }) => {
                 geoStamp,
                 contentHash,
                 sorSokeEnabled,
+                title: title.trim() || 'Untitled Report',
+                description: description.trim(),
+                lane,
             };
 
             onSubmit?.(submissionData);
@@ -222,6 +231,9 @@ const SubmissionFlow: React.FC<SubmissionFlowProps> = ({ onSubmit }) => {
         setGeoStamp(null);
         setScrubResult(null);
         setError(null);
+        setTitle('');
+        setDescription('');
+        setLane('witness');
         setScrubSteps(prev => prev.map(s => ({ ...s, status: 'pending' as const })));
     }, []);
 
@@ -342,6 +354,103 @@ const SubmissionFlow: React.FC<SubmissionFlowProps> = ({ onSubmit }) => {
                         )}
                     </div>
 
+                    {/* Report Details: Title, Description, Lane */}
+                    <div style={{ marginTop: 'var(--space-lg)', display: 'flex', flexDirection: 'column', gap: 'var(--space-md)' }}>
+                        <div>
+                            <label htmlFor="report-title" style={{ display: 'block', marginBottom: 'var(--space-xs)', fontSize: '0.75rem', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.05em', color: 'var(--text-muted)' }}>
+                                Report Title
+                            </label>
+                            <input
+                                id="report-title"
+                                type="text"
+                                value={title}
+                                onChange={(e) => setTitle(e.target.value)}
+                                placeholder="Brief title for your report..."
+                                maxLength={120}
+                                style={{
+                                    width: '100%',
+                                    padding: 'var(--space-sm) var(--space-md)',
+                                    background: 'var(--surface-card)',
+                                    border: 'var(--border-weight) solid var(--border-color)',
+                                    borderRadius: 'var(--radius-sm)',
+                                    color: 'var(--text-main)',
+                                    fontSize: '0.875rem',
+                                    boxSizing: 'border-box',
+                                }}
+                            />
+                        </div>
+                        <div>
+                            <label htmlFor="report-description" style={{ display: 'block', marginBottom: 'var(--space-xs)', fontSize: '0.75rem', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.05em', color: 'var(--text-muted)' }}>
+                                Description
+                            </label>
+                            <textarea
+                                id="report-description"
+                                value={description}
+                                onChange={(e) => setDescription(e.target.value)}
+                                placeholder="Describe what you witnessed..."
+                                rows={3}
+                                maxLength={2000}
+                                style={{
+                                    width: '100%',
+                                    padding: 'var(--space-sm) var(--space-md)',
+                                    background: 'var(--surface-card)',
+                                    border: 'var(--border-weight) solid var(--border-color)',
+                                    borderRadius: 'var(--radius-sm)',
+                                    color: 'var(--text-main)',
+                                    fontSize: '0.875rem',
+                                    resize: 'vertical',
+                                    fontFamily: 'inherit',
+                                    boxSizing: 'border-box',
+                                }}
+                            />
+                        </div>
+                        <div>
+                            <label style={{ display: 'block', marginBottom: 'var(--space-xs)', fontSize: '0.75rem', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.05em', color: 'var(--text-muted)' }}>
+                                Feed Lane
+                            </label>
+                            <div style={{ display: 'flex', gap: 'var(--space-sm)' }}>
+                                <button
+                                    type="button"
+                                    id="lane-witness"
+                                    onClick={() => setLane('witness')}
+                                    style={{
+                                        flex: 1,
+                                        padding: 'var(--space-sm) var(--space-md)',
+                                        background: lane === 'witness' ? 'var(--truth-emerald)' : 'transparent',
+                                        border: `var(--border-weight) solid ${lane === 'witness' ? 'var(--truth-emerald)' : 'var(--border-color)'}`,
+                                        borderRadius: 'var(--radius-sm)',
+                                        color: lane === 'witness' ? 'white' : 'var(--text-main)',
+                                        cursor: 'pointer',
+                                        fontWeight: 600,
+                                        fontSize: '0.8125rem',
+                                        transition: 'all 0.2s ease',
+                                    }}
+                                >
+                                    ◈ Witness Report
+                                </button>
+                                <button
+                                    type="button"
+                                    id="lane-social"
+                                    onClick={() => setLane('social')}
+                                    style={{
+                                        flex: 1,
+                                        padding: 'var(--space-sm) var(--space-md)',
+                                        background: lane === 'social' ? 'var(--text-main)' : 'transparent',
+                                        border: `var(--border-weight) solid ${lane === 'social' ? 'var(--text-main)' : 'var(--border-color)'}`,
+                                        borderRadius: 'var(--radius-sm)',
+                                        color: lane === 'social' ? 'var(--surface-card)' : 'var(--text-main)',
+                                        cursor: 'pointer',
+                                        fontWeight: 600,
+                                        fontSize: '0.8125rem',
+                                        transition: 'all 0.2s ease',
+                                    }}
+                                >
+                                    💬 Social Opinion
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
                     {/* Sor Soke toggle (audio only) */}
                     {capturedMedia.type === 'audio' && (
                         <button
@@ -349,7 +458,7 @@ const SubmissionFlow: React.FC<SubmissionFlowProps> = ({ onSubmit }) => {
                             onClick={() => setSorSokeEnabled(!sorSokeEnabled)}
                             type="button"
                             id="sor-soke-preview-toggle"
-                            style={{ marginBottom: 'var(--space-md)', width: '100%', justifyContent: 'center' }}
+                            style={{ marginBottom: 'var(--space-md)', marginTop: 'var(--space-md)', width: '100%', justifyContent: 'center' }}
                         >
                             🔊 Sor Soke Voice Disguise {sorSokeEnabled ? 'ON' : 'OFF'}
                         </button>

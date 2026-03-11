@@ -10,7 +10,7 @@ CREATE TABLE IF NOT EXISTS witness_reports (
     report_id       TEXT PRIMARY KEY,
     anon_token      TEXT NOT NULL,
     media_key       TEXT,                           -- R2 object key (null if R2 unavailable)
-    media_type      TEXT CHECK(media_type IN ('image', 'audio', 'video')) DEFAULT 'image',
+    media_type      TEXT CHECK(media_type IN ('image', 'audio', 'video', 'text')) DEFAULT 'text',
     file_size       INTEGER DEFAULT 0,              -- bytes
     geo_label       TEXT NOT NULL DEFAULT 'Unknown', -- "Lagos, NG" or "Ikeja District"
     network_country TEXT,                           -- CF-IPCountry (Key A)
