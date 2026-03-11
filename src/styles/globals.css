@@ -1,89 +1,198 @@
 /*
- * GoVoicing — Doczai Design System
- * "Modern Warm Minimalism"
+ * GoVoicing — Modern Citizen Hub Design System
+ * Tailwind v4 + Component Classes
  *
- * Adapted from Doczai (doczai.webflow.io) via SKILL.md
- * Cream backgrounds, Inter font, lavender accents, mesh gradients
+ * "Warm Tech" aesthetic: organic surfaces, glassmorphism depth,
+ * bold black authority, soft lavender accents.
  */
 
-/* ============================================
-   1. CSS CUSTOM PROPERTIES (Design Tokens)
-   ============================================ */
-:root {
-  /* Page Backgrounds */
-  --bg-page: #F3F1EB;
-  /* Warm cream — primary page background */
-  --bg-surface: #FFFFFF;
-  /* Pure white — cards, panels, elevated surfaces */
-  --bg-surface-muted: #F5F5F0;
-  /* Light grey-cream — secondary surfaces */
-  --bg-overlay: #EDEDED;
-  /* Neutral grey — sidebar, muted containers */
+@import "tailwindcss";
 
-  /* Dark surfaces (admin, witness cam, amnesia) */
+/* ─── Tailwind v4 Theme — Modern Citizen Hub ─── */
+@theme {
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "SF Mono", "Fira Code", "Consolas", monospace;
+
+  --color-surface: #F3F1EB;
+  --color-surface-white: #FFFFFF;
+  --color-surface-muted: #F5F5F0;
+  --color-surface-overlay: #EDEDED;
+
+  --color-brand: #A8A5E6;
+  --color-brand-hover: #9692D9;
+  --color-brand-deep: #8E8AD4;
+
+  --color-cta: #000000;
+  --color-cta-hover: #1A1A1A;
+
+  --color-success: #059669;
+  --color-success-light: #D1FAE5;
+  --color-warning: #D97706;
+  --color-warning-light: #FEF3C7;
+  --color-danger: #DC2626;
+
+  --color-text-primary: #000000;
+  --color-text-body: #6B6B6B;
+  --color-text-secondary: #888888;
+  --color-text-inverse: #FFFFFF;
+
+  --color-border: #E5E5E0;
+  --color-border-hover: #D0D0CB;
+
+  --radius-2xl: 24px;
+  --radius-3xl: 32px;
+}
+
+/* ═══ Component Classes — from Current UI & UX.md ═══ */
+@layer components {
+  /* The Signature Modern Card */
+  .modern-card {
+    @apply bg-white rounded-[32px] border border-slate-200/30 shadow-sm transition-all duration-500 ease-out;
+  }
+  .modern-card:hover {
+    @apply -translate-y-1 shadow-xl shadow-brand/5 border-brand/20;
+  }
+
+  /* Glassmorphism Panel */
+  .glass-panel {
+    @apply bg-white/60 backdrop-blur-xl border border-white/40 shadow-2xl shadow-black/5;
+  }
+
+  /* High-Authority CTA */
+  .btn-primary {
+    @apply bg-cta text-white px-8 py-4 rounded-2xl font-bold transition-all flex items-center justify-center gap-2 shadow-xl shadow-cta/20 no-underline;
+  }
+  .btn-primary:hover {
+    @apply bg-cta-hover scale-[1.02] text-white;
+  }
+  .btn-primary:active {
+    @apply scale-[0.98];
+  }
+
+  /* Secondary Button */
+  .btn-secondary {
+    @apply bg-white/60 backdrop-blur-sm text-text-primary border border-border rounded-2xl px-6 py-3.5 font-semibold text-sm transition-all no-underline;
+  }
+  .btn-secondary:hover {
+    @apply border-brand/30 shadow-lg shadow-brand/5 text-text-primary;
+  }
+
+  /* Status Badges */
+  .badge-verified {
+    @apply bg-success/10 text-success text-[9px] font-black px-3 py-1 rounded-full flex items-center gap-1.5 uppercase tracking-[0.1em];
+  }
+  .badge-pending {
+    @apply bg-warning/10 text-warning text-[9px] font-black px-3 py-1 rounded-full flex items-center gap-1.5 uppercase tracking-[0.1em];
+  }
+
+  /* Metadata Label */
+  .meta-label {
+    @apply font-black uppercase tracking-[0.2em] text-[10px] text-text-secondary;
+  }
+}
+
+/* ═══ Base Overrides — make Tailwind work with existing components ═══ */
+@layer base {
+  *,
+  *::before,
+  *::after {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  html {
+    font-size: 16px;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+  }
+
+  body {
+    font-family: var(--font-sans);
+    font-size: 15px;
+    font-weight: 400;
+    line-height: 1.625;
+    color: var(--color-text-body);
+    background-color: var(--color-surface);
+    min-height: 100vh;
+  }
+
+  #root {
+    min-height: 100vh;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-sans);
+    font-weight: 900;
+    line-height: 1.1;
+    letter-spacing: -0.03em;
+    color: var(--color-text-primary);
+  }
+
+  a {
+    color: inherit;
+    text-decoration: none;
+  }
+
+  button {
+    cursor: pointer;
+    font-family: var(--font-sans);
+  }
+
+  /* Minimal scrollbar */
+  ::-webkit-scrollbar { width: 6px; }
+  ::-webkit-scrollbar-track { background: var(--color-surface); }
+  ::-webkit-scrollbar-thumb { background: var(--color-border); border-radius: 9999px; }
+  ::-webkit-scrollbar-thumb:hover { background: var(--color-border-hover); }
+}
+
+/* ═══ Legacy CSS Aliases — keep old components working ═══ */
+:root {
+  /* Old token names → new values */
+  --bg-page: #F3F1EB;
+  --bg-surface: #FFFFFF;
+  --bg-surface-muted: #F5F5F0;
+  --bg-overlay: #EDEDED;
   --bg-obsidian: #0D1117;
   --bg-obsidian-surface: #161B22;
 
-  /* Gradient Backgrounds */
   --gradient-mesh: linear-gradient(135deg,
-      rgba(180, 200, 240, 0.4) 0%,
-      rgba(200, 230, 220, 0.3) 40%,
-      rgba(220, 210, 240, 0.3) 70%,
-      rgba(200, 230, 210, 0.2) 100%);
+    rgba(180, 200, 240, 0.4) 0%,
+    rgba(200, 230, 220, 0.3) 40%,
+    rgba(220, 210, 240, 0.3) 70%,
+    rgba(200, 230, 210, 0.2) 100%);
 
-  /* Text */
   --text-primary: #000000;
-  /* Headings, primary labels */
   --text-body: #6B6B6B;
-  /* Body copy, descriptions */
   --text-secondary: #888888;
-  /* Captions, metadata, timestamps */
   --text-inverse: #FFFFFF;
-  /* On dark surfaces */
-
-  /* Legacy aliases (backwards compat for admin/witness/amnesia) */
   --text-main: #000000;
   --text-muted: #888888;
 
-  /* Accents */
   --accent-primary: #A8A5E6;
-  /* Soft lavender — icons, active states, links */
   --accent-primary-hover: #8E8AD4;
-  /* Darker lavender — hover state */
   --accent-dark: #000000;
-  /* Black — primary CTA buttons */
   --accent-dark-hover: #222222;
-  /* Near-black — button hover */
 
-  /* Semantic colors (preserved for status indicators) */
   --truth-emerald: #059669;
   --truth-emerald-light: #D1FAE5;
   --caution-amber: #D97706;
   --caution-amber-light: #FEF3C7;
   --danger-red: #DC2626;
 
-  /* Borders */
   --border-width: 1px;
   --border-default: #E5E5E0;
-  /* Warm light grey */
   --border-hover: #D0D0CB;
-  /* Slightly darker on hover */
-
-  /* Legacy aliases */
   --border-weight: 1px;
   --border-color: #E5E5E0;
   --border-light: #E5E5E0;
 
-  /* Typography */
-  --font-primary: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-  --font-mono: 'SF Mono', 'Fira Code', 'Consolas', monospace;
+  --font-primary: var(--font-sans);
+  --font-serif: var(--font-sans);
+  --font-body: var(--font-sans);
+  --font-data: var(--font-sans);
 
-  /* Legacy aliases */
-  --font-serif: var(--font-primary);
-  --font-body: var(--font-primary);
-  --font-data: var(--font-primary);
-
-  /* Spacing (8px grid) */
   --space-1: 4px;
   --space-2: 8px;
   --space-3: 12px;
@@ -94,197 +203,40 @@
   --space-8: 64px;
   --space-9: 96px;
   --space-10: 128px;
-
-  /* Legacy aliases */
   --space-xs: 4px;
   --space-sm: 8px;
   --space-md: 16px;
   --space-lg: 24px;
   --space-xl: 32px;
-  --space-2xl: 48px;
-  --space-3xl: 64px;
 
-  /* Radius */
   --radius-sm: 6px;
   --radius-md: 8px;
   --radius-lg: 12px;
   --radius-xl: 16px;
   --radius-full: 9999px;
 
-  /* Shadows — Doczai avoids shadows, uses border + cream layering */
   --shadow-none: none;
   --shadow-subtle: 0 1px 3px rgba(0, 0, 0, 0.04);
 
-  /* Animation */
   --ease-default: cubic-bezier(0.4, 0, 0.2, 1);
   --ease-decelerate: cubic-bezier(0, 0, 0.2, 1);
-  --ease-accelerate: cubic-bezier(0.4, 0, 1, 1);
-  --ease-snappy: cubic-bezier(0.4, 0, 0.2, 1);
+  --ease-snappy: cubic-bezier(0.16, 1, 0.3, 1);
   --duration-fast: 150ms;
   --duration-normal: 200ms;
   --duration-slow: 300ms;
   --stagger-delay: 0.05s;
 
-  /* Z-index scale */
   --z-base: 0;
   --z-dropdown: 100;
   --z-modal: 200;
   --z-toast: 300;
   --z-overlay: 400;
+
+  /* Card and surface aliases */
+  --card-bg: rgba(255, 255, 255, 0.6);
 }
 
-
-/* ============================================
-   2. RESET & BASE
-   ============================================ */
-*,
-*::before,
-*::after {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
-
-html {
-  font-size: 16px;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-rendering: optimizeLegibility;
-}
-
-body {
-  font-family: var(--font-primary);
-  font-size: 16px;
-  font-weight: 300;
-  line-height: 1.625;
-  color: var(--text-body);
-  background-color: var(--bg-page);
-  min-height: 100vh;
-}
-
-#root {
-  min-height: 100vh;
-}
-
-
-/* ============================================
-   3. TYPOGRAPHY SYSTEM
-   ============================================ */
-
-h1,
-h2,
-h3,
-h4,
-h5,
-h6 {
-  font-family: var(--font-primary);
-  font-weight: 700;
-  line-height: 1.1;
-  letter-spacing: -0.02em;
-  color: var(--text-primary);
-}
-
-h1 {
-  font-size: clamp(2.5rem, 6vw, 4.5rem);
-  letter-spacing: -0.03em;
-  line-height: 1.05;
-}
-
-h2 {
-  font-size: clamp(2rem, 4vw, 2.625rem);
-  font-weight: 700;
-}
-
-h3 {
-  font-size: clamp(1.5rem, 3vw, 1.75rem);
-  font-weight: 600;
-}
-
-h4 {
-  font-size: 1.25rem;
-  font-weight: 600;
-}
-
-/* Body text — Light weight for Doczai feel */
-p {
-  font-family: var(--font-primary);
-  font-size: 16px;
-  font-weight: 300;
-  line-height: 1.625;
-  color: var(--text-body);
-  max-width: 65ch;
-}
-
-/* Data labels — keep functional but use Inter */
-.data-label,
-.mono {
-  font-family: var(--font-primary);
-  font-size: 0.75rem;
-  font-weight: 500;
-  letter-spacing: 0.02em;
-  color: var(--text-secondary);
-}
-
-.data-hash {
-  font-family: var(--font-mono);
-  font-size: 10px;
-  color: var(--text-secondary);
-  word-break: break-all;
-}
-
-
-/* ============================================
-   4. LINKS & INTERACTIVE
-   ============================================ */
-a {
-  color: var(--accent-primary);
-  text-decoration: none;
-  transition: color var(--duration-normal) ease;
-}
-
-a:hover {
-  color: var(--accent-primary-hover);
-}
-
-/* "Know More →" link pattern */
-.link-arrow {
-  display: inline-flex;
-  align-items: center;
-  gap: var(--space-2);
-  font-size: 16px;
-  font-weight: 600;
-  color: var(--accent-primary);
-  text-decoration: none;
-  transition: color 0.2s ease;
-}
-
-.link-arrow::after {
-  content: '→';
-  font-size: 18px;
-  transition: transform 0.2s ease;
-}
-
-.link-arrow:hover {
-  color: var(--accent-primary-hover);
-}
-
-.link-arrow:hover::after {
-  transform: translateX(4px);
-}
-
-button {
-  cursor: pointer;
-  font-family: var(--font-primary);
-  font-size: 0.875rem;
-  font-weight: 500;
-}
-
-
-/* ============================================
-   5. UTILITY CLASSES
-   ============================================ */
-
-/* Layout */
+/* ═══ Utility classes for old components ═══ */
 .container {
   width: 100%;
   max-width: 1200px;
@@ -292,136 +244,55 @@ button {
   padding: 0 var(--space-7);
 }
 
-.flex {
-  display: flex;
+.data-label,
+.mono {
+  font-family: var(--font-sans);
+  font-size: 0.75rem;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  color: var(--color-text-secondary);
 }
 
-.flex-col {
-  flex-direction: column;
+.data-hash {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--color-text-secondary);
+  word-break: break-all;
 }
 
-.items-center {
-  align-items: center;
-}
-
-.justify-between {
-  justify-content: space-between;
-}
-
-.gap-sm {
-  gap: var(--space-2);
-}
-
-.gap-md {
-  gap: var(--space-4);
-}
-
-.gap-lg {
-  gap: var(--space-5);
-}
-
-/* Staggered Reveal — smooth decelerate */
+/* Staggered Reveal */
 @keyframes slideUp {
-  from {
-    opacity: 0;
-    transform: translateY(16px);
-  }
-
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+  from { opacity: 0; transform: translateY(16px); }
+  to { opacity: 1; transform: translateY(0); }
 }
-
 .stagger-enter {
   animation: slideUp 400ms var(--ease-decelerate) forwards;
   opacity: 0;
 }
 
-/* Amnesia Wipe — preserved */
+/* Amnesia Wipe */
 @keyframes amnesiaWipe {
-  0% {
-    clip-path: inset(0 100% 0 0);
-  }
-
-  50% {
-    clip-path: inset(0 0 0 0);
-  }
-
-  100% {
-    clip-path: inset(0 0 0 100%);
-  }
+  0% { clip-path: inset(0 100% 0 0); }
+  50% { clip-path: inset(0 0 0 0); }
+  100% { clip-path: inset(0 0 0 100%); }
 }
 
-/* Emerald stamp pulse — preserved for verification badges */
+/* Emerald stamp pulse */
 @keyframes emeraldPulse {
-
-  0%,
-  100% {
-    transform: scale(1);
-  }
-
-  50% {
-    transform: scale(1.15);
-  }
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.15); }
 }
+.pulse-emerald { animation: emeraldPulse 0.6s ease; }
 
-.pulse-emerald {
-  animation: emeraldPulse 0.6s ease;
-}
-
-/* Scanning animation for Amnesia Audit */
+/* Scanning animation */
 @keyframes scanLine {
-  from {
-    width: 0%;
-  }
-
-  to {
-    width: 100%;
-  }
+  from { width: 0%; }
+  to { width: 100%; }
 }
 
 /* Page load fade in */
 @keyframes fadeInUp {
-  from {
-    opacity: 0;
-    transform: translateY(12px);
-  }
-
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
 }
-
-.fade-in {
-  animation: fadeInUp 400ms var(--ease-decelerate) forwards;
-}
-
-
-/* ============================================
-   6. SCROLLBAR (Minimal)
-   ============================================ */
-::-webkit-scrollbar {
-  width: 6px;
-}
-
-::-webkit-scrollbar-track {
-  background: var(--bg-page);
-}
-
-::-webkit-scrollbar-thumb {
-  background: var(--border-default);
-  border-radius: var(--radius-full);
-}
-
-::-webkit-scrollbar-thumb:hover {
-  background: var(--border-hover);
-}
-
-
-/* ============================================
-   7. RESPONSIVE BREAKPOINTS
-   ============================================ */
-/* Mobile-first. */
-/* sm: 480px, md: 768px, lg: 1024px, xl: 1280px, 2xl: 1440px */
+.fade-in { animation: fadeInUp 400ms var(--ease-decelerate) forwards; }

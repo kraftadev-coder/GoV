@@ -1,20 +1,12 @@
 /**
- * Module 3+5: Report Page
- *
- * The primary evidence submission page. Embeds the SubmissionFlow
- * component which handles camera capture, media processing, and submission.
- * Now wired to POST to /api/report Worker endpoint.
- *
- * Source:
- * - Implementation Plan §Module 3: "Report page with WitnessCam & SubmissionFlow"
- * - Feature Goal Matrix §"Blow whistle with proofs"
+ * Report Page — Modern Citizen Hub Design
+ * File a witness report with camera/audio evidence.
  */
 
 import React, { useCallback, useState } from 'react';
-import { Main } from '../components/ui';
+import { Link } from 'react-router-dom';
 import SubmissionFlow, { type SubmissionData } from '../components/witness/SubmissionFlow';
 import { useAuth } from '../contexts/AuthContext';
-import '../styles/report.css';
 import { API_BASE } from '../lib/apiConfig';
 
 interface SubmitState {
@@ -32,18 +24,9 @@ const Report: React.FC = () => {
             setSubmitState({ status: 'error', message: 'No active session. Please refresh the page.' });
             return;
         }
-
         setSubmitState({ status: 'submitting', message: 'Submitting report...' });
-
         try {
-            // Map SubmissionFlow type to API mediaType
-            const mediaTypeMap: Record<string, string> = {
-                photo: 'image',
-                audio: 'audio',
-                video: 'video',
-            };
-
-            // Build FormData for multipart upload (includes media file)
+            const mediaTypeMap: Record<string, string> = { photo: 'image', audio: 'audio', video: 'video' };
             const formData = new FormData();
             formData.append('media', data.file);
             formData.append('title', data.title);
@@ -54,112 +37,72 @@ const Report: React.FC = () => {
             formData.append('mediaType', mediaTypeMap[data.type] || 'image');
             formData.append('anonToken', session.anonToken);
 
-            const response = await fetch(`${API_BASE}/api/report`, {
-                method: 'POST',
-                body: formData,
-                // Don't set Content-Type — browser sets it with boundary for multipart
-            });
-
+            const response = await fetch(`${API_BASE}/api/report`, { method: 'POST', body: formData });
             const result = await response.json();
 
             if (!response.ok) {
-                setSubmitState({
-                    status: 'error',
-                    message: result.error || `Submission failed (HTTP ${response.status})`,
-                });
+                setSubmitState({ status: 'error', message: result.error || `Submission failed (HTTP ${response.status})` });
                 return;
             }
 
-            // Success — award reputation points locally
             awardPoints({ type: 'verified-report', basePoints: 150 });
-
-            setSubmitState({
-                status: 'success',
-                message: 'Report submitted successfully!',
-                reportId: result.reportId,
-            });
-
-            console.log('[Report] Evidence submitted:', {
-                reportId: result.reportId,
-                verificationStatus: result.verificationStatus,
-                lane: data.lane,
-            });
+            setSubmitState({ status: 'success', message: 'Report submitted successfully!', reportId: result.reportId });
         } catch (err) {
-            const message = err instanceof Error ? err.message : 'Network error — please try again';
-            setSubmitState({ status: 'error', message });
+            setSubmitState({ status: 'error', message: err instanceof Error ? err.message : 'Network error — please try again' });
         }
     }, [session, awardPoints]);
 
     return (
-        <Main>
-            <div className="report-page">
-                {/* Hero header */}
-                <section className="report-page__hero">
-                    <div className="report-page__badge">📸 WITNESS EVIDENCE</div>
-                    <h1 className="report-page__title">File a Witness Report</h1>
-                    <p className="report-page__subtitle">
-                        Capture photo or audio evidence of civic issues. Your identity is protected by the <strong>Amnesia Protocol</strong>.
-                    </p>
-                    <p style={{ fontSize: '0.8125rem', color: 'var(--text-muted)', marginTop: 'var(--space-xs)' }}>
-                        💬 Want to share a text opinion instead? <a href="/" style={{ color: 'var(--lavender, #b4a7d6)', fontWeight: 600 }}>Post on the Social feed →</a>
-                    </p>
-                </section>
-
-                {/* Status Messages */}
-                {submitState.status === 'submitting' && (
-                    <div style={{
-                        padding: 'var(--space-md)',
-                        background: 'rgba(59, 130, 246, 0.08)',
-                        border: '1px solid rgba(59, 130, 246, 0.3)',
-                        borderRadius: 'var(--radius-sm)',
-                        color: 'var(--text-main)',
-                        marginBottom: 'var(--space-lg)',
-                        display: 'flex',
-                        alignItems: 'center',
-                        gap: 'var(--space-sm)',
-                    }}>
-                        <span style={{ animation: 'spin 1s linear infinite', display: 'inline-block' }}>⏳</span>
-                        {submitState.message}
-                    </div>
-                )}
-
-                {submitState.status === 'error' && (
-                    <div style={{
-                        padding: 'var(--space-md)',
-                        background: 'rgba(220, 38, 38, 0.08)',
-                        border: '1px solid var(--danger-red, #dc2626)',
-                        borderRadius: 'var(--radius-sm)',
-                        color: 'var(--danger-red, #dc2626)',
-                        marginBottom: 'var(--space-lg)',
-                    }}>
-                        ⚠ {submitState.message}
-                    </div>
-                )}
-
-                {submitState.status === 'success' && (
-                    <div style={{
-                        padding: 'var(--space-md)',
-                        background: 'rgba(16, 185, 129, 0.08)',
-                        border: '1px solid var(--truth-emerald, #10b981)',
-                        borderRadius: 'var(--radius-sm)',
-                        color: 'var(--truth-emerald, #10b981)',
-                        marginBottom: 'var(--space-lg)',
-                    }}>
-                        ✓ {submitState.message}
-                        {submitState.reportId && (
-                            <span style={{ display: 'block', fontSize: '0.75rem', marginTop: 'var(--space-xs)', opacity: 0.7 }}>
-                                Report ID: {submitState.reportId}
-                            </span>
-                        )}
-                    </div>
-                )}
-
-                {/* Submission flow */}
-                <section className="report-page__flow">
-                    <SubmissionFlow onSubmit={handleSubmit} />
-                </section>
+        <div className="mx-auto max-w-3xl px-4 py-8 sm:px-6">
+            {/* Page Header */}
+            <div className="mb-8">
+                <div className="glass-panel mb-6 inline-flex items-center gap-2 rounded-full px-4 py-2">
+                    <svg className="h-4 w-4 text-brand" fill="none" stroke="currentColor" strokeWidth={1.5} viewBox="0 0 24 24">
+                        <path d="M6.827 6.175A2.31 2.31 0 015.186 7.23c-.38.054-.757.112-1.134.175C2.999 7.58 2.25 8.507 2.25 9.574V18a2.25 2.25 0 002.25 2.25h15A2.25 2.25 0 0021.75 18V9.574c0-1.067-.75-1.994-1.802-2.169a47.865 47.865 0 00-1.134-.175 2.31 2.31 0 01-1.64-1.055l-.822-1.316a2.192 2.192 0 00-1.736-1.039 48.774 48.774 0 00-5.232 0 2.192 2.192 0 00-1.736 1.039l-.821 1.316z" />
+                        <path d="M16.5 12.75a4.5 4.5 0 11-9 0 4.5 4.5 0 019 0z" />
+                    </svg>
+                    <span className="meta-label">Witness Evidence</span>
+                </div>
+                <h1 className="text-3xl font-black tracking-tighter text-text-primary sm:text-4xl">
+                    File a Witness Report
+                </h1>
+                <p className="mt-3 max-w-xl text-[15px] leading-relaxed text-text-body">
+                    Capture photo or audio evidence of civic issues. Your identity is protected by the <strong className="text-text-primary">Amnesia Protocol</strong>.
+                </p>
+                <p className="mt-2 text-[13px] text-text-secondary">
+                    Want to share a text opinion instead?{' '}
+                    <Link to="/" className="font-semibold text-brand hover:text-brand-deep">Post on the Social feed →</Link>
+                </p>
             </div>
-        </Main>
+
+            {/* Status Messages */}
+            {submitState.status === 'submitting' && (
+                <div className="modern-card mb-6 flex items-center gap-3 border-brand/20 bg-brand/5 p-4">
+                    <div className="h-5 w-5 animate-spin rounded-full border-2 border-brand/30 border-t-brand" />
+                    <span className="text-sm font-medium text-text-primary">{submitState.message}</span>
+                </div>
+            )}
+
+            {submitState.status === 'error' && (
+                <div className="modern-card mb-6 border-danger/20 bg-danger/5 p-4">
+                    <p className="text-sm font-medium text-danger">⚠ {submitState.message}</p>
+                </div>
+            )}
+
+            {submitState.status === 'success' && (
+                <div className="modern-card mb-6 border-success/20 bg-success-light p-4">
+                    <p className="text-sm font-medium text-success">✓ {submitState.message}</p>
+                    {submitState.reportId && (
+                        <p className="mt-1 text-xs text-success/70">Report ID: {submitState.reportId}</p>
+                    )}
+                </div>
+            )}
+
+            {/* Submission Flow */}
+            <div className="modern-card overflow-hidden p-0">
+                <SubmissionFlow onSubmit={handleSubmit} />
+            </div>
+        </div>
     );
 };
 
