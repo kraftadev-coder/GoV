@@ -1,7 +1,7 @@
 # GoVoicing — Cloudflare Workers Configuration
 # Source: Implementation Plan Module 5
 
-name = "govoicing-api"
+name = "govoicing"
 main = "workers/index.ts"
 compatibility_date = "2024-12-01"
 compatibility_flags = ["nodejs_compat"]
